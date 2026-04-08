@@ -1,0 +1,47 @@
+version: "3.9"
+
+services:
+
+  phish-api:
+    build: .
+    container_name: phish-api
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - PHISH_DB_PATH=/data/predictions.db
+      - PHISH_THRESHOLD=0.5
+      - PHISH_RATE_LIMIT_PER_MINUTE=600
+    volumes:
+      - phish_data:/data
+      - ./models:/app/models:ro
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: phish-prometheus
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    depends_on:
+      - phish-api
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: phish-grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana_data:/var/lib/grafana
+    depends_on:
+      - prometheus
+
+volumes:
+  phish_data:
+  prometheus_data:
+  grafana_data:

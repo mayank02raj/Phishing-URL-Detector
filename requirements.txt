@@ -1,0 +1,14 @@
+fastapi==0.111.0
+uvicorn[standard]==0.30.1
+pydantic==2.7.4
+pydantic-settings==2.3.4
+slowapi==0.1.9
+prometheus-client==0.20.0
+xgboost==2.0.3
+torch==2.3.0 --index-url https://download.pytorch.org/whl/cpu
+scikit-learn==1.4.2
+pandas==2.2.2
+numpy==1.26.4
+shap==0.45.1
+joblib==1.4.2
+tldextract==5.1.2
